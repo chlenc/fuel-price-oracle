@@ -23,6 +23,10 @@ export type ContractIdInput = { value: string };
 
 export type ContractIdOutput = { value: string };
 
+export type U128Input = { upper: BigNumberish; lower: BigNumberish };
+
+export type U128Output = { upper: BN; lower: BN };
+
 export type IdentityInput = Enum<{
   Address: AddressInput;
   ContractId: ContractIdInput;
@@ -36,21 +40,45 @@ export type IdentityOutput = Enum<{
 interface OracleAbiInterface extends Interface {
   functions: {
     owner: FunctionFragment;
-    price: FunctionFragment;
-    set_price: FunctionFragment;
+    price_eth: FunctionFragment;
+    price_dai: FunctionFragment;
+    set_price_eth: FunctionFragment;
+    set_price_dai: FunctionFragment;
   };
 
   encodeFunctionData(functionFragment: "owner", values?: undefined): Uint8Array;
-  encodeFunctionData(functionFragment: "price", values?: undefined): Uint8Array;
   encodeFunctionData(
-    functionFragment: "set_price",
-    values: [BigNumberish]
+    functionFragment: "price_eth",
+    values?: undefined
+  ): Uint8Array;
+  encodeFunctionData(
+    functionFragment: "price_dai",
+    values?: undefined
+  ): Uint8Array;
+  encodeFunctionData(
+    functionFragment: "set_price_eth",
+    values: [U128Input]
+  ): Uint8Array;
+  encodeFunctionData(
+    functionFragment: "set_price_dai",
+    values: [U128Input]
   ): Uint8Array;
 
   decodeFunctionData(functionFragment: "owner", data: BytesLike): DecodedValue;
-  decodeFunctionData(functionFragment: "price", data: BytesLike): DecodedValue;
   decodeFunctionData(
-    functionFragment: "set_price",
+    functionFragment: "price_eth",
+    data: BytesLike
+  ): DecodedValue;
+  decodeFunctionData(
+    functionFragment: "price_dai",
+    data: BytesLike
+  ): DecodedValue;
+  decodeFunctionData(
+    functionFragment: "set_price_eth",
+    data: BytesLike
+  ): DecodedValue;
+  decodeFunctionData(
+    functionFragment: "set_price_dai",
     data: BytesLike
   ): DecodedValue;
 }
@@ -60,8 +88,12 @@ export class OracleAbi extends Contract {
   functions: {
     owner: InvokeFunction<[], IdentityOutput>;
 
-    price: InvokeFunction<[], BN>;
+    price_eth: InvokeFunction<[], U128Output>;
 
-    set_price: InvokeFunction<[price: BigNumberish], void>;
+    price_dai: InvokeFunction<[], U128Output>;
+
+    set_price_eth: InvokeFunction<[priceEth: U128Input], void>;
+
+    set_price_dai: InvokeFunction<[priceDai: U128Input], void>;
   };
 }

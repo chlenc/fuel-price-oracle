@@ -41,22 +41,90 @@ const _abi = [
   },
   {
     type: "function",
-    name: "price",
+    name: "price_eth",
     inputs: [],
     outputs: [
       {
-        type: "u64",
+        type: "struct U128",
         name: "",
+        components: [
+          {
+            type: "u64",
+            name: "upper",
+          },
+          {
+            type: "u64",
+            name: "lower",
+          },
+        ],
       },
     ],
   },
   {
     type: "function",
-    name: "set_price",
+    name: "price_dai",
+    inputs: [],
+    outputs: [
+      {
+        type: "struct U128",
+        name: "",
+        components: [
+          {
+            type: "u64",
+            name: "upper",
+          },
+          {
+            type: "u64",
+            name: "lower",
+          },
+        ],
+      },
+    ],
+  },
+  {
+    type: "function",
+    name: "set_price_eth",
     inputs: [
       {
-        type: "u64",
-        name: "price",
+        type: "struct U128",
+        name: "priceEth",
+        components: [
+          {
+            type: "u64",
+            name: "upper",
+          },
+          {
+            type: "u64",
+            name: "lower",
+          },
+        ],
+      },
+    ],
+    outputs: [
+      {
+        type: "()",
+        name: "",
+        components: [],
+      },
+    ],
+  },
+  {
+    type: "function",
+    name: "set_price_dai",
+    inputs: [
+      {
+        type: "struct U128",
+        name: "priceDai",
+        components: [
+          {
+            type: "u64",
+            name: "upper",
+          },
+          {
+            type: "u64",
+            name: "lower",
+          },
+        ],
       },
     ],
     outputs: [

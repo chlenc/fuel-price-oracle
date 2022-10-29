@@ -18,11 +18,11 @@ use data_structures::State;
 use errors::AccessError;
 use events::PriceUpdateEvent;
 use interface::Oracle;
+use std::u128::*;
 
 storage {
-    // Current price of tracked asset
-    // TODO use option when https://github.com/FuelLabs/fuels-rs/issues/415 is fixed
-    price: u64 = 0,
+    priceEth: U128 = ~U128::from(0, 0),
+    priceDai: U128 = ~U128::from(0, 0),
 }
 
 // TODO treat owner as an identity once https://github.com/FuelLabs/sway/issues/2647 is fixed
@@ -32,16 +32,25 @@ impl Oracle for Contract {
     }
 
     #[storage(read)]
-    fn price() -> u64 {
-        storage.price
+    fn price_eth() -> U128 {
+       return storage.priceEth;
+    }
+    #[storage(read)]
+    fn price_dai() -> U128 {
+       return storage.priceDai;
     }
 
     #[storage(write)]
-    fn set_price(price: u64) {
+    fn set_price_eth(priceEth: U128) {
         require(msg_sender().unwrap() == Identity::Address(~Address::from(owner)), AccessError::NotOwner);
+        storage.priceEth = priceEth;
+        // log(PriceUpdateEvent { price: priceEth.lower });
+    }
 
-        storage.price = price;
-
-        log(PriceUpdateEvent { price });
+    #[storage(write)]
+    fn set_price_dai(priceDai: U128) {
+        require(msg_sender().unwrap() == Identity::Address(~Address::from(owner)), AccessError::NotOwner);
+        storage.priceDai = priceDai;
+        // log(PriceUpdateEvent { price: priceDai.lower });
     }
 }
